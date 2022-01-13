@@ -482,6 +482,7 @@ function vtkRenderWindowInteractor(publicAPI, model) {
         inputSource.gripSpace == null
           ? null
           : xrFrame.getPose(inputSource.gripSpace, xrRefSpace);
+      const targetRayPose = inputSource.targetRaySpace == null ? null : xrFrame.getPose(inputSource.targetRaySpace, xrRefSpace);
       const gp = inputSource.gamepad;
       const hand = inputSource.handedness;
       if (gp) {
@@ -498,12 +499,13 @@ function vtkRenderWindowInteractor(publicAPI, model) {
           if (
             model.lastGamepadValues[gp.index][hand].buttons[b] !==
               gp.buttons[b].pressed &&
-            gripPose != null
+            (gripPose != null || targetRayPose != null)
           ) {
+            let pose = (gripPose ? gripPose : targetRayPose);
             publicAPI.button3DEvent({
               gamepad: gp,
-              position: gripPose.transform.position,
-              orientation: gripPose.transform.orientation,
+              position: pose.transform.position,
+              orientation: pose.transform.orientation,
               pressed: gp.buttons[b].pressed,
               device:
                 inputSource.handedness === 'left'

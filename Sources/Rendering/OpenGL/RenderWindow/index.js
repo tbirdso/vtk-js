@@ -1265,9 +1265,9 @@ export function extend(publicAPI, model, initialValues = {}) {
     'shaderCache',
     'textureUnitManager',
     'webgl2',
-    'vrDisplay',
     'useBackgroundImage',
     'xrSupported',
+    'xrReferenceSpace'
   ]);
 
   macro.setGet(publicAPI, model, [

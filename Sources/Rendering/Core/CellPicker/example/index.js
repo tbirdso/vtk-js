@@ -10,6 +10,8 @@ import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenR
 import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
 import vtkSphereSource from 'vtk.js/Sources/Filters/Sources/SphereSource';
 
+import controlPanel from 'vtk.js/Examples/Geometry/AR/controller.html';
+
 // ----------------------------------------------------------------------------
 // Standard rendering code setup
 // ----------------------------------------------------------------------------
@@ -17,6 +19,27 @@ import vtkSphereSource from 'vtk.js/Sources/Filters/Sources/SphereSource';
 const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
 const renderer = fullScreenRenderer.getRenderer();
 const renderWindow = fullScreenRenderer.getRenderWindow();
+
+// add ar button
+fullScreenRenderer.addController(controlPanel);
+const arbutton = document.querySelector('.arbutton');
+arbutton.disabled = !fullScreenRenderer
+  .getApiSpecificRenderWindow()
+  .getXrSupported();
+
+const SESSION_IS_AR = true;
+arbutton.addEventListener('click', (e) => {
+  if (arbutton.textContent === 'Start AR') {
+    fullScreenRenderer.setBackground([0, 0, 0, 0]);
+    fullScreenRenderer.getApiSpecificRenderWindow().startXR(SESSION_IS_AR);
+    arbutton.textContent = 'Exit AR';
+  } else {
+    fullScreenRenderer.setBackground([0, 0, 0, 255]);
+    fullScreenRenderer.getApiSpecificRenderWindow().stopXR(SESSION_IS_AR);
+    arbutton.textContent = 'Start AR';
+  }
+});
+
 
 // ----------------------------------------------------------------------------
 // Add a cone source
@@ -86,6 +109,18 @@ renderWindow.getInteractor().onRightButtonPress((callData) => {
   }
   renderWindow.render();
 });
+
+renderWindow.getInteractor().onXrSelect((callData) => {
+  if (renderer !== callData.pokedRenderer) {
+    return;
+  }
+
+  const xrData = callData.xrEvent;
+  const refSpace = fullScreenRenderer.getApiSpecificRenderWindow().getXrReferenceSpace();
+  const pose = xrData.frame.getPose(xrData.inputSource.targetRaySpace, refSpace);
+
+  console.log(pose);
+})
 
 // -----------------------------------------------------------
 // Make some variables global so that you can inspect and
