@@ -202,6 +202,11 @@ export function load(container, options) {
       container.removeChild(progressContainer);
       loadZipContent(content, renderWindow, renderer);
     });
+
+    fullScreenRenderer.setBackground([0,0,0,0]);
+    fullScreenRenderer
+      .getApiSpecificRenderWindow()
+      .startXR(true);
   }
 }
 

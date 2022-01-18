@@ -165,11 +165,11 @@ function createViewer(rootContainer, fileContents, options) {
   //arButton.addEventListener('click', () => {
   const SESSION_IS_AR = true;
   if (arButton.textContent === 'Start AR') {
-    fullScreenRenderer.setBackground([...background, 0]);
+    fullScreenRenderer.setBackground([0,0,0, 0]);
     fullScreenRenderer.getApiSpecificRenderWindow().startXR(SESSION_IS_AR);
     arButton.textContent = 'Exit AR';
   } else {
-    fullScreenRenderer.setBackground([...background, 255]);
+    fullScreenRenderer.setBackground([0,0,0, 255]);
     fullScreenRenderer.getApiSpecificRenderWindow().stopXR(SESSION_IS_AR);
     arButton.textContent = 'Start AR';
   }
