@@ -158,6 +158,30 @@ function createViewer(rootContainer, fileContents, options) {
     fpsMonitor.update();
   });
 
+  // Set up XR
+  const arButton = document.createElement('button');
+  //arButton.setAttribute('class', selectorClass);
+  arButton.innerHTML = 'Start AR';
+  //arButton.addEventListener('click', () => {
+  const SESSION_IS_AR = true;
+  if (arButton.textContent === 'Start AR') {
+    fullScreenRenderer.setBackground([...background, 0]);
+    fullScreenRenderer.getApiSpecificRenderWindow().startXR(SESSION_IS_AR);
+    arButton.textContent = 'Exit AR';
+  } else {
+    fullScreenRenderer.setBackground([...background, 255]);
+    fullScreenRenderer.getApiSpecificRenderWindow().stopXR(SESSION_IS_AR);
+    arButton.textContent = 'Start AR';
+  }
+  //});
+  if (
+    navigator.xr !== undefined &&
+    navigator.xr.isSessionSupported('immersive-ar') &&
+    fullScreenRenderer.getApiSpecificRenderWindow().getXrSupported()
+  ) {
+    document.querySelector('.content').appendChild(arButton);
+  }
+
   // First render
   renderer.resetCamera();
   renderWindow.render();
