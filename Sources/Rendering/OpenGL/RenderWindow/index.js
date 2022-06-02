@@ -380,11 +380,8 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
 
     camera.setPhysicalScale(physicalScale);
     camera.setPhysicalTranslation(physicalTranslation);
-    // Clip at 0.2m, 10.0m in physical space by default
-    // FIXME: clipping plane is set differently than expected:
-    //  - near clip is always directly in front of the camera
-    //  - far clip is at difference of first and second values (i.e., passing [3,5] -> near ~ 0, far ~ 2m)
-    camera.setClippingRange(0.1 * physicalScale, 10.0 * physicalScale);
+    // Clip at 0.1m, 100.0m in physical space by default
+    camera.setClippingRange(0.1 * physicalScale, 100.0 * physicalScale);
   };
 
   publicAPI.stopXR = async () => {
