@@ -21,27 +21,23 @@ import '@kitware/vtk.js/IO/Core/DataAccessHelper/JSZipDataAccessHelper';
 
 import vtkResourceLoader from '@kitware/vtk.js/IO/Core/ResourceLoader';
 
+// TODO test LookingGlass WebXR polyfill
+import controlPanel from './controller.html';
 
-// Load looking glass WebXR polyfill
-{
+//fixme
+if (true) {
   vtkResourceLoader
     .loadScript(
-      "https://unpkg.com/@lookingglass/webxr@0.1.9/dist/webxr.js"
+      'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js'
     )
     .then(() => {
       // eslint-disable-next-line no-new, no-undef
-      const config = LookingGlassConfig;
-      config.tileHeight = 512;
-      config.numViews = 45;
-      config.targetY = 0;
-      config.targetZ = 0;
-      config.targetDiam = 3;
-      config.fovy = (14 * Math.PI) / 180;
-      new LookingGlassWebXRPolyfill();
 
-      console.log(config);
+
+      new LookingGlassWebXRPolyfill();
     });
 }
+
 
 // ----------------------------------------------------------------------------
 // Standard rendering code setup
@@ -101,7 +97,7 @@ renderWindow.render();
 // UI control handling
 // -----------------------------------------------------------
 
-//fullScreenRenderer.addController(controlPanel);
+fullScreenRenderer.addController(controlPanel);
 const representationSelector = document.querySelector('.representations');
 const resolutionChange = document.querySelector('.resolution');
 const vrbutton = document.querySelector('.vrbutton');
