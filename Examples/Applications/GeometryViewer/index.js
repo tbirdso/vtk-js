@@ -23,6 +23,8 @@ import vtkFPSMonitor from '@kitware/vtk.js/Interaction/UI/FPSMonitor';
 import '@kitware/vtk.js/IO/Core/DataAccessHelper/HtmlDataAccessHelper';
 import '@kitware/vtk.js/IO/Core/DataAccessHelper/JSZipDataAccessHelper';
 
+
+
 import {
   ColorMode,
   ScalarMode,

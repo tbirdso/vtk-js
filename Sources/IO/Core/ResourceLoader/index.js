@@ -1,11 +1,12 @@
 const LOADED_URLS = [];
 
-export function loadScript(url) {
+export function loadScript(url, scriptType = 'text/javascript') {
+
   return new Promise((resolve, reject) => {
     if (LOADED_URLS.indexOf(url) === -1) {
       LOADED_URLS.push(url);
       const newScriptTag = document.createElement('script');
-      newScriptTag.type = 'text/javascript';
+      newScriptTag.type = scriptType;
       newScriptTag.src = url;
       newScriptTag.onload = resolve;
       newScriptTag.onerror = reject;

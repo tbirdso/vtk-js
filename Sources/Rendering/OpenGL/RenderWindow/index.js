@@ -295,12 +295,13 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
 
   // Request an XR session on the user device with WebXR,
   // typically in response to a user request such as a button press
-  publicAPI.startXR = (isAR) => {
+  publicAPI.startXR = (isAR, xrSessionIsLookingGlass) => {
     if (navigator.xr === undefined) {
       throw new Error('WebXR is not available');
     }
 
     model.xrSessionIsAR = isAR;
+    model.xrSessionIsLookingGlass = xrSessionIsLookingGlass;
     const sessionType = isAR ? 'immersive-ar' : 'immersive-vr';
     if (!navigator.xr.isSessionSupported(sessionType)) {
       if (isAR) {
@@ -458,15 +459,56 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
       // get the first renderer
       const ren = model.renderable.getRenderers()[0];
 
-      // Do a render pass for each eye
-      xrPose.views.forEach((view) => {
-        const viewport = glLayer.getViewport(view);
+      //FIXME
+      const vH = model.size[1];
+      const vW = model.size[0];
+        //console.log(gl.getParameter(gl.VIEWPORT));
 
-        gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+      const N_VIEWS = 1;
+      const N_COLS = 1;
+      const N_ROWS = 3;
+
+      for(let tmpIndex = 0; tmpIndex < N_COLS * N_ROWS; ++tmpIndex) {
+        const col = tmpIndex % N_COLS;
+        const row = (N_ROWS - 1) - Math.floor(tmpIndex / N_COLS);
+        const startX = col / N_COLS;
+        const startY = row / N_ROWS;
+        const endX = (col + 1) / N_COLS;
+        const endY = (row + 1) / N_ROWS;            
+
+        ren.setViewport(startX, startY, endX, endY);
+
+        let view = xrPose.views[(tmpIndex * 4 + 23) % xrPose.views.length];
+      const viewport = glLayer.getViewport(view);
+
+        ren
+          .getActiveCamera()
+          .computeViewParametersFromPhysicalMatrix(
+            view.transform.inverse.matrix
+          );
+        ren.getActiveCamera().setProjectionMatrix(view.projectionMatrix);
+        
+        publicAPI.traverseAllPasses();
+      }
+
+      // FIXME
+      /*
+      // Do a render pass for each eye
+      xrPose.views.forEach((view, index) => {
+        const viewport = glLayer.getViewport(view);
+        const vH = model.size[1];
+        const vW = model.size[0];
+        //console.log(gl.getParameter(gl.VIEWPORT));
+
+        // FIXME
+        gl.viewport(0, 0, vW, vH);
+        //gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+        //console.log(gl.getParameter(gl.VIEWPORT));
+        //gl.viewport(0, 0, 4096, 4096);
 
         // TODO: Appropriate handling for AR passthrough on HMDs
         // with two eyes will require further investigation.
-        if (!model.xrSessionIsAR) {
+        if (false || !model.xrSessionIsAR && !model.xrSessionIsLookingGlass) {
           if (view.eye === 'left') {
             ren.setViewport(0, 0, 0.5, 1.0);
           } else if (view.eye === 'right') {
@@ -477,15 +519,60 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
           }
         }
 
+        if(true || model.xrSessionIsLookingGlass) {
+
+          for(let tmpIndex = index; tmpIndex < index + 6; ++tmpIndex) {
+            const N_COLS = 3;
+            const N_ROWS = 4;
+            const col = tmpIndex % N_COLS;
+            const row = (N_ROWS - 1) - Math.floor(tmpIndex / N_COLS);
+            const startX = col / N_COLS;
+            const startY = row / N_ROWS;
+            const endX = (col + 1) / N_COLS;
+            const endY = (row + 1) / N_ROWS;            
+
+            ren.setViewport(startX, startY, endX, endY);
+          
+            ren
+              .getActiveCamera()
+              .computeViewParametersFromPhysicalMatrix(
+                view.transform.inverse.matrix
+              );
+            ren.getActiveCamera().setProjectionMatrix(view.projectionMatrix);
+        
+            publicAPI.traverseAllPasses();
+
+          }
+          // TODO: Set quilt dimensions via type of Looking Glass display.
+          // Assumes 6x8 quilt for Looking Glass Portrait
+          //console.log(index);
+          /*
+          */
+
+          // FIXME test multiple renders
+
+          /*
+          let startX = viewport.x / vW;
+          let startY = viewport.y / vH;
+          let endX = startX + viewport.width / vW;
+          let endY = startY + (viewport.height / 2) / vH
+          * /
+        }
+
+        // FIXME
+        /*
         ren
           .getActiveCamera()
           .computeViewParametersFromPhysicalMatrix(
             view.transform.inverse.matrix
           );
         ren.getActiveCamera().setProjectionMatrix(view.projectionMatrix);
-
+        
         publicAPI.traverseAllPasses();
+        * /
       });
+      */
+
     }
   };
 
@@ -1281,6 +1368,7 @@ const DEFAULT_VALUES = {
   activeFramebuffer: null,
   xrSession: null,
   xrSessionIsAR: false,
+  xrSessionIsLookingGlass: false,
   xrReferenceSpace: null,
   xrSupported: true,
   imageFormat: 'image/png',

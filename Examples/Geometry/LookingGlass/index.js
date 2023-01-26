@@ -24,19 +24,11 @@ import vtkResourceLoader from '@kitware/vtk.js/IO/Core/ResourceLoader';
 // TODO test LookingGlass WebXR polyfill
 import controlPanel from './controller.html';
 
-//fixme
-if (true) {
-  vtkResourceLoader
-    .loadScript(
-      'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js'
-    )
-    .then(() => {
-      // eslint-disable-next-line no-new, no-undef
-
-
-      new LookingGlassWebXRPolyfill();
-    });
-}
+import(/* webpackIgnore: true */ 'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js').then((obj) => {
+  console.log('lookingglasspolyfillloaded!');
+  console.log(obj);
+  new obj.LookingGlassWebXRPolyfill();
+});
 
 
 // ----------------------------------------------------------------------------
@@ -57,7 +49,7 @@ const renderWindow = fullScreenRenderer.getRenderWindow();
 // this
 // ----------------------------------------------------------------------------
 
-const coneSource = vtkConeSource.newInstance({ height: 100.0, radius: 50 });
+const coneSource = vtkConeSource.newInstance({ height: 1.0, radius: 0.5 });
 const filter = vtkCalculator.newInstance();
 
 filter.setInputConnection(coneSource.getOutputPort());
@@ -116,7 +108,7 @@ resolutionChange.addEventListener('input', (e) => {
 
 vrbutton.addEventListener('click', (e) => {
   if (vrbutton.textContent === 'Send To VR') {
-    fullScreenRenderer.getApiSpecificRenderWindow().startXR();
+    fullScreenRenderer.getApiSpecificRenderWindow().startXR(false, true);
     vrbutton.textContent = 'Return From VR';
   } else {
     fullScreenRenderer.getApiSpecificRenderWindow().stopXR();
