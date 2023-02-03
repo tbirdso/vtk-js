@@ -463,10 +463,9 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
       const vH = model.size[1];
       const vW = model.size[0];
         //console.log(gl.getParameter(gl.VIEWPORT));
-
-      const N_VIEWS = 1;
-      const N_COLS = 1;
-      const N_ROWS = 3;
+;
+      const N_COLS = 2;
+      const N_ROWS = 1;
 
       for(let tmpIndex = 0; tmpIndex < N_COLS * N_ROWS; ++tmpIndex) {
         const col = tmpIndex % N_COLS;
@@ -474,9 +473,12 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
         const startX = col / N_COLS;
         const startY = row / N_ROWS;
         const endX = (col + 1) / N_COLS;
-        const endY = (row + 1) / N_ROWS;            
+        const endY = (row + 1) / N_ROWS;
 
-        ren.setViewport(startX, startY, endX, endY);
+        console.log(global.lookingglassconfig);
+
+        //ren.setViewport(startX, startY, endX, endY);
+        //ren.setViewport(0,0,1,1);
 
         let view = xrPose.views[(tmpIndex * 4 + 23) % xrPose.views.length];
       const viewport = glLayer.getViewport(view);

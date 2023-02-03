@@ -161,6 +161,7 @@ function vtkFullScreenRenderWindow(publicAPI, model) {
 
   // Handle window resize
   publicAPI.resize = () => {
+    /*
     const dims = model.container.getBoundingClientRect();
     const devicePixelRatio = window.devicePixelRatio || 1;
     model.apiSpecificRenderWindow.setSize(
@@ -171,6 +172,8 @@ function vtkFullScreenRenderWindow(publicAPI, model) {
       model.resizeCallback(dims);
     }
     model.renderWindow.render();
+    */
+    //FIXME donothing
   };
 
   publicAPI.setResizeCallback = (cb) => {

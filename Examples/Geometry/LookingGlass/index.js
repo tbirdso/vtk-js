@@ -27,6 +27,13 @@ import controlPanel from './controller.html';
 import(/* webpackIgnore: true */ 'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js').then((obj) => {
   console.log('lookingglasspolyfillloaded!');
   console.log(obj);
+
+  const config = obj.LookingGlassConfig;
+  config.tileHeight = 1028;
+  config.numViews = 2;
+
+  global.lookingglassconfig = config;
+
   new obj.LookingGlassWebXRPolyfill();
 });
 
