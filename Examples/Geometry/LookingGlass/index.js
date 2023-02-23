@@ -24,8 +24,9 @@ import vtkResourceLoader from '@kitware/vtk.js/IO/Core/ResourceLoader';
 // TODO test LookingGlass WebXR polyfill
 import controlPanel from './controller.html';
 
-import(/* webpackIgnore: true */ 'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js').then((obj) => {
-  console.log('lookingglasspolyfillloaded!');
+
+//import(/* webpackIgnore: true */ 'https://unpkg.com/@lookingglass/webxr@0.3.0/dist/@lookingglass/bundle/webxr.js').then((obj) => {
+/*  console.log('lookingglasspolyfillloaded!');
   console.log(obj);
 
   const config = obj.LookingGlassConfig;
@@ -35,7 +36,7 @@ import(/* webpackIgnore: true */ 'https://unpkg.com/@lookingglass/webxr@0.3.0/di
   global.lookingglassconfig = config;
 
   new obj.LookingGlassWebXRPolyfill();
-});
+});*/
 
 
 // ----------------------------------------------------------------------------
