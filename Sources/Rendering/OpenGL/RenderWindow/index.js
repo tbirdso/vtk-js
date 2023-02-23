@@ -455,6 +455,7 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, glLayer.framebuffer);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.clear(gl.DEPTH_BUFFER_BIT);
+      publicAPI.setSize(glLayer.framebufferWidth, glLayer.framebufferHeight);
 
       // get the first renderer
       const ren = model.renderable.getRenderers()[0];
@@ -487,18 +488,18 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
         const fbw = glLayer.framebufferWidth;
         const fbh = glLayer.framebufferHeight;
 
-        if(global.heightOffset === undefined) {
+        /*if(global.heightOffset === undefined) {
           global.heightOffset = 0.48;
-        }
+        }*/
 
         let startX = viewport.x / fbw;
         const startY = viewport.y / fbw;
         let endX = (viewport.x + viewport.width) / fbw;
         let endY = (viewport.y + viewport.height) / fbh;
 
-        if(endY + global.heightOffset < 1.0) {
+        /*if(endY + global.heightOffset < 1.0) {
           endY = global.heightOffset + endY;
-        }
+        }*/
         
 
 
