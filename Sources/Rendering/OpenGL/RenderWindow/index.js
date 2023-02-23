@@ -430,6 +430,19 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
     publicAPI.traverseAllPasses();
   };
 
+  //FIXME
+  publicAPI.aspect = () => {
+    return 0.75;
+  }
+
+  publicAPI.tileHeight = () => {
+    return 256;
+  }
+
+  publicAPI.tileWidth = () => {
+    return Math.round(this.tileHeight * this.aspect)
+  }
+
   publicAPI.xrRender = async (t, frame) => {
     const xrSession = frame.session;
 
@@ -519,88 +532,6 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
         
         publicAPI.traverseAllPasses();
       });
-
-      // FIXME
-      /*
-      // Do a render pass for each eye
-      xrPose.views.forEach((view, index) => {
-        const viewport = glLayer.getViewport(view);
-        const vH = model.size[1];
-        const vW = model.size[0];
-        //console.log(gl.getParameter(gl.VIEWPORT));
-
-        // FIXME
-        gl.viewport(0, 0, vW, vH);
-        //gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        //console.log(gl.getParameter(gl.VIEWPORT));
-        //gl.viewport(0, 0, 4096, 4096);
-
-        // TODO: Appropriate handling for AR passthrough on HMDs
-        // with two eyes will require further investigation.
-        if (false || !model.xrSessionIsAR && !model.xrSessionIsLookingGlass) {
-          if (view.eye === 'left') {
-            ren.setViewport(0, 0, 0.5, 1.0);
-          } else if (view.eye === 'right') {
-            ren.setViewport(0.5, 0, 1.0, 1.0);
-          } else {
-            // No handling for non-eye viewport
-            return;
-          }
-        }
-
-        if(true || model.xrSessionIsLookingGlass) {
-
-          for(let tmpIndex = index; tmpIndex < index + 6; ++tmpIndex) {
-            const N_COLS = 3;
-            const N_ROWS = 4;
-            const col = tmpIndex % N_COLS;
-            const row = (N_ROWS - 1) - Math.floor(tmpIndex / N_COLS);
-            const startX = col / N_COLS;
-            const startY = row / N_ROWS;
-            const endX = (col + 1) / N_COLS;
-            const endY = (row + 1) / N_ROWS;            
-
-            ren.setViewport(startX, startY, endX, endY);
-          
-            ren
-              .getActiveCamera()
-              .computeViewParametersFromPhysicalMatrix(
-                view.transform.inverse.matrix
-              );
-            ren.getActiveCamera().setProjectionMatrix(view.projectionMatrix);
-        
-            publicAPI.traverseAllPasses();
-
-          }
-          // TODO: Set quilt dimensions via type of Looking Glass display.
-          // Assumes 6x8 quilt for Looking Glass Portrait
-          //console.log(index);
-          /*
-          */
-
-          // FIXME test multiple renders
-
-          /*
-          let startX = viewport.x / vW;
-          let startY = viewport.y / vH;
-          let endX = startX + viewport.width / vW;
-          let endY = startY + (viewport.height / 2) / vH
-          * /
-        }
-
-        // FIXME
-        /*
-        ren
-          .getActiveCamera()
-          .computeViewParametersFromPhysicalMatrix(
-            view.transform.inverse.matrix
-          );
-        ren.getActiveCamera().setProjectionMatrix(view.projectionMatrix);
-        
-        publicAPI.traverseAllPasses();
-        * /
-      });
-      */
 
     }
   };
