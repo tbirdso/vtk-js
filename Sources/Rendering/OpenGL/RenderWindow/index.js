@@ -478,57 +478,21 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
       const vW = model.size[0];
         //console.log(gl.getParameter(gl.VIEWPORT));
 ;
-      const N_COLS = 1;
-      const N_ROWS = 2;
+      const N_COLS = 10;
+      const N_ROWS = 5;
 
       for(let tmpIndex = 0; tmpIndex < N_COLS * N_ROWS; ++tmpIndex) {
-      //xrPose.views.forEach((view, index) => {
         const col = tmpIndex % N_COLS;
         const row = (N_ROWS - 1) - Math.floor(tmpIndex / N_COLS);
         const startX = col / N_COLS;
         const startY = row / N_ROWS;
         const endX = (col + 1) / N_COLS;
         const endY = (row + 1) / N_ROWS;
+        ren.setViewport(startX, startY, endX, endY);
 
         console.log(tmpIndex, 'viewport:', startX, startY, endX, endY);
 
-        //console.log(global.lookingglassconfig);*/
-
-        //ren.setViewport(startX, startY, endX, endY);
-        //ren.setViewport(0,0,1,1);
-
-        //let view = xrPose.views[(tmpIndex * 4 + 23) % xrPose.views.length]; // hash for unique view
-        //const viewport = glLayer.getViewport(view);
-
-      //FIXME
-        const fbw = glLayer.framebufferWidth;
-        const fbh = glLayer.framebufferHeight;
-
-        /*if(global.heightOffset === undefined) {
-          global.heightOffset = 0.48;
-        }*/
-
-        /*
-        let startX = viewport.x / fbw;
-        const startY = viewport.y / fbw;
-        let endX = (viewport.x + viewport.width) / fbw;
-        let endY = (viewport.y + viewport.height) / fbh; */
-
-        /*if(endY + global.heightOffset < 1.0) {
-          endY = global.heightOffset + endY;
-        }*/
-        
-
-
-        /*
-        ren.setViewport(startX, startY, endX, endY);
-
-        const percentX = endX - startX;
-        const percentY = endY - startY;
-
-        console.log(index, 'viewport: ', viewport.x, viewport.y, viewport.width, viewport.height, ' fbuf: ', fbw, fbh, '%', percentX, percentY);*/
-
-        let view = xrPose.views[0];
+        let view = xrPose.views[tmpIndex % 2];
         ren
           .getActiveCamera()
           .computeViewParametersFromPhysicalMatrix(
