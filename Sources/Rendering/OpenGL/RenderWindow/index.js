@@ -479,6 +479,12 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
             // No handling for non-eye viewport
             return;
           }
+        } else if (model.xrSessionType == XrSessionTypes.LookingGlassVR) {
+          let startX = viewport.x / glLayer.framebufferWidth;
+          let startY = viewport.y / glLayer.framebufferHeight;
+          let endX = (viewport.x + viewport.width) / glLayer.framebufferWidth;
+          let endY = (viewport.y + viewport.height) / glLayer.framebufferHeight;
+          ren.setViewport(startX, startY, endX, endY);
         } else {
           ren.setViewport(0, 0, 1, 1);
         }
@@ -492,6 +498,11 @@ function vtkOpenGLRenderWindow(publicAPI, model) {
 
         publicAPI.traverseAllPasses();
       });
+
+      // Reset scissorbox before any subsequent rendering to external displays
+      // on frame end, such as rendering to a Looking Glass display.
+      gl.scissor(0, 0, glLayer.framebufferWidth, glLayer.framebufferHeight);
+      gl.disable(gl.SCISSOR_TEST);
     }
   };
 
