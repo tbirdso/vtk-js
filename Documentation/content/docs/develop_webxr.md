@@ -59,6 +59,14 @@ vtk.js supports virtual and augmented reality rendering via the [WebXR device AP
 
 </div>
 
+### Holographic Examples
+
+<div class="gallery">
+
+[![Looking Glass Cone][LookingGlassCone]](../examples/LookingGlass.html)
+
+</div>
+
 ### For Developers
 
 Developers without access to XR hardware may find it convenient to install and use the [Mozilla WebXR emulator](https://github.com/MozillaReality/WebXR-emulator-extension) in their browser.
@@ -81,3 +89,4 @@ While WebXR has broad industry support, it is not yet implemented in all browser
 [HeadFullVolume]: ../docs/gallery/HeadFullVolume.png
 [ChestCTHybrid]: ../docs/gallery/ChestCTHybrid.png
 [HeadGradient]: ../docs/gallery/HeadGradient.png
+[LookingGlassCone]: ../docs/gallery/LookingGlassCone.png
